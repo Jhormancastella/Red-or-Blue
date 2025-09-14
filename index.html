@@ -343,5 +343,39 @@
       canvas.width = window.innerWidth;
     });
   </script>
+  <script>
+  // Función para generar sonido
+  function playBeep(frequency = 440, duration = 300) {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    oscillator.type = "sine"; // Tipos: sine, square, sawtooth, triangle
+    oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); // volumen bajo
+
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + duration / 1000);
+  }
+
+  // Ejemplos de uso:
+  function choose(pill) {
+    if (pill === "blue") {
+      playBeep(600, 300); // sonido más agudo
+      setTimeout(() => {
+        window.location.href = "https://jhormancastella.github.io/FotoStudioRosy/";
+      }, 500);
+    } else if (pill === "red") {
+      playBeep(200, 500); // sonido más grave
+      setTimeout(() => {
+        window.location.href = "https://jhormancastella.github.io/portafolio/";
+      }, 700);
+    }
+  }
+</script>
+
 </body>
 </html>
