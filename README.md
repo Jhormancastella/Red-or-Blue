@@ -10,9 +10,9 @@ Un mini-juego web inspirado en la icónica escena de **Matrix** donde debes eleg
 
 ---
 
-## 🚀 Demo en Vivo
+## 🚀 web-mini-juego
 
-[![Jugar Ahora](https://img.shields.io/badge/Jugar-Ahora!-red?style=for-the-badge&logo=matrix)](https://jhormancastella.github.io/portafolio/)
+[![Jugar Ahora](https://img.shields.io/badge/Jugar-Ahora!-red?style=for-the-badge&logo=matrix)](https://jhormancastella.github.io/Red-or-Blue/)
 
 ---
 
