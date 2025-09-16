@@ -87,16 +87,62 @@
       text-shadow: 0 0 10px #0f0;
     }
 
+    /* ---- MORPHEUS CON GLITCH ---- */
     .morpheus {
-      max-width: 300px;
-      margin-bottom: 30px;
+      position: relative;
+      display: inline-block;
+      width: 300px;
+      height: 400px; /* ajusta proporción */
+      background-image: url("https://e7.pngegg.com/pngimages/908/632/png-clipart-man-wearing-black-jacket-illustration-morpheus-the-matrix-neo-red-pill-and-blue-pill-youtube-good-pills-will-play-fictional-character-film.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
       opacity: 0;
       transform: scale(0.9);
       transition: opacity 2s ease-in-out, transform 2s ease-in-out;
     }
+
     .morpheus.visible {
       opacity: 1;
       transform: scale(1);
+    }
+
+    /* Capas duplicadas para glitch */
+    .morpheus::before,
+    .morpheus::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: inherit;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .morpheus:hover::before {
+      opacity: 1;
+      left: 4px;
+      clip: rect(10px, 9999px, 80px, 0);
+      animation: glitch 0.3s infinite;
+    }
+
+    .morpheus:hover::after {
+      opacity: 1;
+      left: -4px;
+      clip: rect(40px, 9999px, 100px, 0);
+      animation: glitch 0.3s infinite reverse;
+    }
+
+    @keyframes glitch {
+      0% { clip: rect(10px, 9999px, 40px, 0); }
+      20% { clip: rect(50px, 9999px, 90px, 0); }
+      40% { clip: rect(20px, 9999px, 70px, 0); }
+      60% { clip: rect(80px, 9999px, 120px, 0); }
+      80% { clip: rect(30px, 9999px, 60px, 0); }
+      100% { clip: rect(10px, 9999px, 40px, 0); }
     }
 
     .pills {
@@ -151,10 +197,6 @@
       min-height: 30px;
     }
 
-    #dialogue[aria-live] {
-      outline: none;
-    }
-
     footer {
       position: absolute;
       bottom: 15px;
@@ -191,25 +233,58 @@
       100% { opacity: 0; }
     }
 
-    /* Responsividad */
     @media (max-width: 600px) {
-      h1 {
-        font-size: 1.2rem;
-      }
-      .morpheus {
-        max-width: 180px;
-      }
-      .pill {
-        width: 90px;
-        height: 38px;
-        font-size: 1rem;
-      }
-      .pills {
-        gap: 18px;
-      }
-      .intro {
-        font-size: 1rem;
-      }
+      h1 { font-size: 1.2rem; }
+      .morpheus { width: 180px; height: 250px; }
+      .pill { width: 90px; height: 38px; font-size: 1rem; }
+      .pills { gap: 18px; }
+      .intro { font-size: 1rem; }
+    }
+
+    /* ---- GLITCH TEXTO ---- */
+    .glitch {
+      position: relative;
+      display: inline-block;
+      font-size: 2rem;
+      color: #0f0;
+      text-shadow: 0 0 10px #0f0;
+      animation: glitch-skew 1s infinite alternate-reverse;
+    }
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0; top: 0;
+      width: 100%;
+      overflow: hidden;
+      clip: rect(0, 900px, 0, 0);
+    }
+    .glitch::before {
+      animation: glitch-top 1s infinite linear alternate-reverse;
+      color: #f0f;
+    }
+    .glitch::after {
+      animation: glitch-bottom 1.5s infinite linear alternate-reverse;
+      color: #0ff;
+    }
+    @keyframes glitch-top {
+      0% { clip: rect(0, 9999px, 0, 0); transform: translate(-3px, -2px); }
+      25% { clip: rect(0, 9999px, 5px, 0); transform: translate(3px, 2px); }
+      50% { clip: rect(0, 9999px, 10px, 0); transform: translate(-2px, 0); }
+      75% { clip: rect(0, 9999px, 5px, 0); transform: translate(2px, -1px); }
+      100% { clip: rect(0, 9999px, 0, 0); transform: translate(0, 0); }
+    }
+    @keyframes glitch-bottom {
+      0% { clip: rect(10px, 9999px, 15px, 0); transform: translate(2px, 2px); }
+      25% { clip: rect(5px, 9999px, 10px, 0); transform: translate(-2px, -2px); }
+      50% { clip: rect(15px, 9999px, 20px, 0); transform: translate(2px, 0); }
+      75% { clip: rect(10px, 9999px, 15px, 0); transform: translate(-2px, 2px); }
+      100% { clip: rect(0, 9999px, 0, 0); transform: translate(0, 0); }
+    }
+    @keyframes glitch-skew {
+      0% { transform: skew(0deg); }
+      50% { transform: skew(2deg); }
+      100% { transform: skew(-2deg); }
     }
   </style>
 </head>
@@ -223,9 +298,11 @@
 
   <!-- Contenido principal -->
   <div class="content" id="mainContent" aria-live="polite">
-    <h1>¿Cuál pastilla eliges?</h1>
-    <img src="https://e7.pngegg.com/pngimages/908/632/png-clipart-man-wearing-black-jacket-illustration-morpheus-the-matrix-neo-red-pill-and-blue-pill-youtube-good-pills-will-play-fictional-character-film.png" 
-         alt="Morpheus de la película Matrix, ofreciendo dos pastillas" class="morpheus" id="morpheus">
+    <h1 id="title" class="glitch" data-text="¿Cuál pastilla eliges?">¿Cuál pastilla eliges?</h1>
+
+    <!-- Morpheo con glitch -->
+    <div class="morpheus" id="morpheus" role="img"
+         aria-label="Morpheus de la película Matrix, ofreciendo dos pastillas"></div>
 
     <div class="pills">
       <button class="pill red" 
@@ -250,21 +327,18 @@
   </div>
 
   <script>
-    // ---------- Matrix Rain con requestAnimationFrame ----------
+    // ---------- Matrix Rain ----------
     const canvas = document.getElementById("matrix");
     const ctx = canvas.getContext("2d");
-
     function resizeCanvas() {
       canvas.height = window.innerHeight;
       canvas.width = window.innerWidth;
     }
     resizeCanvas();
-
     const letters = "アァイィウヴエェオカガキギクグケゲコゴサザシジスズセゼソゾタダチッヂツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     const fontSize = 14;
     let columns = Math.floor(canvas.width / fontSize);
     let drops = Array.from({length: columns}, () => 1);
-
     function drawMatrix() {
       ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -286,11 +360,10 @@
       drops = Array.from({length: columns}, () => 1);
     });
 
-    // ---------- Intro máquina ----------
+    // ---------- Intro ----------
     const introEl = document.getElementById("introText");
     const introMessage = "Bienvenido a la Matrix...";
     let i = 0;
-
     function typeWriter() {
       if (i < introMessage.length) {
         introEl.textContent += introMessage.charAt(i);
@@ -322,15 +395,16 @@
     // ---------- Elección ----------
     function choose(pill) {
       const transition = document.getElementById("transition");
-      // Detener animación Matrix al salir
       if (window.matrixAnim) cancelAnimationFrame(window.matrixAnim);
 
       if (pill === "blue") {
+        playBeep(600, 300);
         transition.classList.add("blue-exit");
         setTimeout(() => {
           window.location.href = "https://jhormancastella.github.io/FotoStudioRosy/";
         }, 2000);
       } else if (pill === "red") {
+        playBeep(200, 500);
         transition.classList.add("red-exit");
         setTimeout(() => {
           window.location.href = "https://jhormancastella.github.io/portafolio/";
@@ -338,44 +412,19 @@
       }
     }
 
-    window.addEventListener("resize", () => {
-      canvas.height = window.innerHeight;
-      canvas.width = window.innerWidth;
-    });
-  </script>
-  <script>
-  // Función para generar sonido
-  function playBeep(frequency = 440, duration = 300) {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-
-    oscillator.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-
-    oscillator.type = "sine"; // Tipos: sine, square, sawtooth, triangle
-    oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
-    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); // volumen bajo
-
-    oscillator.start();
-    oscillator.stop(audioCtx.currentTime + duration / 1000);
-  }
-
-  // Ejemplos de uso:
-  function choose(pill) {
-    if (pill === "blue") {
-      playBeep(600, 300); // sonido más agudo
-      setTimeout(() => {
-        window.location.href = "https://jhormancastella.github.io/FotoStudioRosy/";
-      }, 500);
-    } else if (pill === "red") {
-      playBeep(200, 500); // sonido más grave
-      setTimeout(() => {
-        window.location.href = "https://jhormancastella.github.io/portafolio/";
-      }, 700);
+    // ---------- Sonido ----------
+    function playBeep(frequency = 440, duration = 300) {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+      gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + duration / 1000);
     }
-  }
-</script>
-
+  </script>
 </body>
 </html>
